@@ -14,11 +14,18 @@
   }
   /* ====== 여기까지 ====== */
 
-  body {
+  html, body {
     margin: 0;
-    height: 100vh;
+    height: 100%;
+  }
+
+  body {
     position: relative;
-    background: var(--bg-color) var(--bg-image) center / cover no-repeat;
+    background-color: var(--bg-color);
+    background-image: var(--bg-image);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     font-family: var(--font-family);
     color: var(--text-color);
   }
