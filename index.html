@@ -28,22 +28,22 @@
   h1 {
     font-size: 28px;
   }
-  .cake-btn {
+  .letter-btn {
     background: none;
     border: none;
     cursor: pointer;
     font-size: 90px;
     line-height: 1;
     padding: 0;
-    position: relative;
+    animation: wiggle 2s ease-in-out infinite;
   }
-  .flame {
-    display: inline-block;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-6deg); }
+    50% { transform: rotate(6deg); }
   }
-  .flame.blown-out {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.6);
+  .letter-btn:active {
+    animation-play-state: paused;
+    transform: scale(0.92);
   }
   .hint {
     font-size: 14px;
@@ -55,22 +55,18 @@
   <h1>생일초대장 1페이지</h1>
   <img src="images/example.jpg" alt="사진" style="max-width: 80%; display:none;">
 
-  <button class="cake-btn" id="cakeBtn" aria-label="케이크 촛불 끄기">
-    🎂<span class="flame" id="flame">🔥</span>
+  <button class="letter-btn" id="letterBtn" aria-label="편지 열기">
+    💌
   </button>
-  <p class="hint">케이크를 눌러 촛불을 꺼주세요</p>
+  <p class="hint">편지를 눌러주세요</p>
 
   <script>
-    const cakeBtn = document.getElementById('cakeBtn');
-    const flame = document.getElementById('flame');
+    const letterBtn = document.getElementById('letterBtn');
 
-    cakeBtn.addEventListener('click', () => {
-      if (cakeBtn.disabled) return;
-      cakeBtn.disabled = true;
-      flame.classList.add('blown-out');
-      setTimeout(() => {
-        window.location.href = 'page2.html';
-      }, 500);
+    letterBtn.addEventListener('click', () => {
+      if (letterBtn.disabled) return;
+      letterBtn.disabled = true;
+      window.location.href = 'page2.html';
     });
   </script>
 </body>
