@@ -10,29 +10,35 @@
     --bg-color: #fff;
     --font-family: sans-serif;
     --text-color: #222;
+    --bg-image: url('images/1P.png');
   }
   /* ====== 여기까지 ====== */
 
   body {
     margin: 0;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    background: var(--bg-color);
+    position: relative;
+    background: var(--bg-color) var(--bg-image) center / cover no-repeat;
     font-family: var(--font-family);
     color: var(--text-color);
   }
-  h1 {
-    font-size: 28px;
+
+  .overlay {
+    position: absolute;
+    top: 62%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
+
   .letter-btn {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 90px;
+    font-size: 70px;
     line-height: 1;
     padding: 0;
     animation: wiggle 2s ease-in-out infinite;
@@ -47,18 +53,17 @@
   }
   .hint {
     font-size: 14px;
-    opacity: 0.6;
+    opacity: 0.7;
   }
 </style>
 </head>
 <body>
-  <h1>생일초대장 1페이지</h1>
-  <img src="images/example.jpg" alt="사진" style="max-width: 80%; display:none;">
-
-  <button class="letter-btn" id="letterBtn" aria-label="편지 열기">
-    💌
-  </button>
-  <p class="hint">편지를 눌러주세요</p>
+  <div class="overlay">
+    <button class="letter-btn" id="letterBtn" aria-label="편지 열기">
+      💌
+    </button>
+    <p class="hint">편지를 눌러주세요</p>
+  </div>
 
   <script>
     const letterBtn = document.getElementById('letterBtn');
