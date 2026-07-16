@@ -26,10 +26,7 @@
   body {
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    gap: 28px;
     background-color: var(--bg-color);
     background-image: var(--bg-image);
     background-position: center;
@@ -39,9 +36,19 @@
     color: var(--text-color);
   }
 
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    transform: translateY(-40px);
+  }
+
   .title {
     text-align: center;
     font-size: 20px;
+    font-weight: bold;
     line-height: 1.5;
   }
   .title p {
@@ -115,23 +122,25 @@
 </style>
 </head>
 <body>
-  <div class="title">
-    <p>이정훈의 생일파티에 초대합니다.</p>
-    <p>룰렛의 결과에 따라 일정이 결정됩니다!</p>
-  </div>
-
-  <div class="wheel-outer">
-    <div class="pointer">▼</div>
-    <div class="wheel" id="wheel">
-      <span class="label" style="--angle:45deg">페이커와 협곡</span>
-      <span class="label" style="--angle:135deg">엔믹스 콘서트</span>
-      <span class="label" style="--angle:225deg">프미나 팬싸인회</span>
-      <span class="label" style="--angle:315deg">다은이와 데이트</span>
+  <div class="content">
+    <div class="title">
+      <p>이정훈의 생일파티에 초대합니다.</p>
+      <p>룰렛의 결과에 따라 일정이 결정됩니다!</p>
     </div>
-  </div>
 
-  <button class="spin-btn" id="spinBtn">룰렛 돌리기</button>
-  <p class="result" id="result"></p>
+    <div class="wheel-outer">
+      <div class="pointer">▼</div>
+      <div class="wheel" id="wheel">
+        <span class="label" style="--angle:45deg">페이커와 협곡</span>
+        <span class="label" style="--angle:135deg">엔믹스 콘서트</span>
+        <span class="label" style="--angle:225deg">프미나 팬싸인회</span>
+        <span class="label" style="--angle:315deg">다은이와 데이트</span>
+      </div>
+    </div>
+
+    <button class="spin-btn" id="spinBtn">룰렛 돌리기</button>
+    <p class="result" id="result"></p>
+  </div>
 
   <script>
     const wheel = document.getElementById('wheel');
@@ -139,11 +148,10 @@
     const result = document.getElementById('result');
 
     let currentRotation = 0;
-    const WINNING_LABEL = '다은이와 데이트';
 
     spinBtn.addEventListener('click', () => {
       spinBtn.disabled = true;
-      result.textContent = '';
+      result.innerHTML = '';
 
       // 4번 항목(270~360도 구간) 중심이 45도이므로,
       // 최종 회전각을 mod 360 기준 35~55도 사이로 맞추면 항상 4번에서 멈춘다.
@@ -157,7 +165,7 @@
       wheel.style.transform = `rotate(${currentRotation}deg)`;
 
       setTimeout(() => {
-        result.textContent = `당첨: ${WINNING_LABEL} 🎉`;
+        result.innerHTML = '축하합니다! 🎉<br>최고미녀 다은님과의 데이트가 성사되셨습니다.';
         spinBtn.disabled = false;
       }, 4000);
     });
