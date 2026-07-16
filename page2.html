@@ -39,8 +39,13 @@
     color: var(--text-color);
   }
 
-  h1 {
-    font-size: 28px;
+  .title {
+    text-align: center;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  .title p {
+    margin: 0;
   }
 
   .wheel-outer {
@@ -101,14 +106,19 @@
   }
 
   .result {
+    margin-top: -16px;
     font-size: 18px;
     font-weight: bold;
     min-height: 24px;
+    text-align: center;
   }
 </style>
 </head>
 <body>
-  <h1>생일초대장 2페이지</h1>
+  <div class="title">
+    <p>이정훈의 생일파티에 초대합니다.</p>
+    <p>룰렛의 결과에 따라 일정이 결정됩니다!</p>
+  </div>
 
   <div class="wheel-outer">
     <div class="pointer">▼</div>
