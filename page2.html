@@ -5,34 +5,143 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생일초대장 - 2</title>
 <style>
+  /* ====== 여기부터 디자인 커스텀 영역 (자유롭게 수정하세요) ====== */
+  :root {
+    --bg-color: #fff;
+    --font-family: sans-serif;
+    --text-color: #222;
+    --sector-1: #ffd1dc;
+    --sector-2: #d1e8ff;
+    --sector-3: #d1ffd6;
+    --sector-4: #fff3b0;
+  }
+  /* ====== 여기까지 ====== */
+
   body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
-    background: #fff;
-    font-family: sans-serif;
+    gap: 28px;
+    background: var(--bg-color);
+    font-family: var(--font-family);
+    color: var(--text-color);
   }
+
   h1 {
     font-size: 28px;
   }
-  .next-btn {
+
+  .wheel-outer {
+    position: relative;
+    width: 280px;
+    height: 280px;
+  }
+
+  .pointer {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    z-index: 2;
+  }
+
+  .wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid var(--text-color);
+    background: conic-gradient(
+      var(--sector-1) 0deg 90deg,
+      var(--sector-2) 90deg 180deg,
+      var(--sector-3) 180deg 270deg,
+      var(--sector-4) 270deg 360deg
+    );
+    position: relative;
+    transform: rotate(0deg);
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  }
+
+  .label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    margin-left: -50px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    transform: translate(0, -50%) rotate(var(--angle)) translateY(-95px) rotate(calc(-1 * var(--angle)));
+  }
+
+  .spin-btn {
     padding: 14px 32px;
     font-size: 18px;
     border: none;
     border-radius: 999px;
     background: #ff5c8a;
     color: #fff;
-    text-decoration: none;
+    cursor: pointer;
+  }
+  .spin-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .result {
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 24px;
   }
 </style>
 </head>
 <body>
   <h1>생일초대장 2페이지</h1>
-  <img src="images/example.jpg" alt="사진" style="max-width: 80%; display:none;">
-  <a class="next-btn" href="index.html">← 이전으로</a>
+
+  <div class="wheel-outer">
+    <div class="pointer">▼</div>
+    <div class="wheel" id="wheel">
+      <span class="label" style="--angle:45deg">페이커와 협곡</span>
+      <span class="label" style="--angle:135deg">엔믹스 콘서트</span>
+      <span class="label" style="--angle:225deg">프미나 팬싸인회</span>
+      <span class="label" style="--angle:315deg">다은이와 데이트</span>
+    </div>
+  </div>
+
+  <button class="spin-btn" id="spinBtn">룰렛 돌리기</button>
+  <p class="result" id="result"></p>
+
+  <script>
+    const wheel = document.getElementById('wheel');
+    const spinBtn = document.getElementById('spinBtn');
+    const result = document.getElementById('result');
+
+    let currentRotation = 0;
+    const WINNING_LABEL = '다은이와 데이트';
+
+    spinBtn.addEventListener('click', () => {
+      spinBtn.disabled = true;
+      result.textContent = '';
+
+      // 4번 항목(270~360도 구간) 중심이 45도이므로,
+      // 최종 회전각을 mod 360 기준 35~55도 사이로 맞추면 항상 4번에서 멈춘다.
+      const targetMod = 45 + (Math.random() * 20 - 10);
+      const currentMod = ((currentRotation % 360) + 360) % 360;
+      let delta = targetMod - currentMod;
+      delta = ((delta % 360) + 360) % 360;
+
+      const fullSpins = 5 * 360;
+      currentRotation += fullSpins + delta;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+      setTimeout(() => {
+        result.textContent = `당첨: ${WINNING_LABEL} 🎉`;
+        spinBtn.disabled = false;
+      }, 4000);
+    });
+  </script>
 </body>
 </html>
