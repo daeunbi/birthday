@@ -24,6 +24,7 @@
   }
 
   body {
+    position: relative;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -34,6 +35,20 @@
     background-repeat: no-repeat;
     font-family: var(--font-family);
     color: var(--text-color);
+  }
+
+  .next-btn {
+    position: absolute;
+    left: 78.8%;
+    top: 81.8%;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    padding: 0;
   }
 
   .content {
@@ -142,10 +157,17 @@
     <p class="result" id="result"></p>
   </div>
 
+  <button class="next-btn" id="nextBtn">다음으로</button>
+
   <script>
     const wheel = document.getElementById('wheel');
     const spinBtn = document.getElementById('spinBtn');
     const result = document.getElementById('result');
+    const nextBtn = document.getElementById('nextBtn');
+
+    nextBtn.addEventListener('click', () => {
+      window.location.href = 'page3.html';
+    });
 
     let currentRotation = 0;
 
