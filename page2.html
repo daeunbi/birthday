@@ -10,6 +10,7 @@
     --bg-color: #fff;
     --font-family: sans-serif;
     --text-color: #222;
+    --bg-image: url('images/2P.png');
     --sector-1: #ffd1dc;
     --sector-2: #d1e8ff;
     --sector-3: #d1ffd6;
@@ -17,15 +18,23 @@
   }
   /* ====== 여기까지 ====== */
 
-  body {
+  html, body {
     margin: 0;
+    height: 100%;
+  }
+
+  body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 28px;
-    background: var(--bg-color);
+    background-color: var(--bg-color);
+    background-image: var(--bg-image);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     font-family: var(--font-family);
     color: var(--text-color);
   }
