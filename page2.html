@@ -113,7 +113,27 @@
     transform: translate(0, -50%) rotate(var(--angle)) translateY(-95px) rotate(calc(-1 * var(--angle)));
   }
 
+  .result-photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .result-photo.show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
   .spin-btn {
+    margin-top: -10px;
     padding: 14px 32px;
     font-size: 18px;
     border: none;
@@ -151,6 +171,7 @@
         <span class="label" style="--angle:225deg">프미나 팬싸인회</span>
         <span class="label" style="--angle:315deg">다은이와 데이트</span>
       </div>
+      <img class="result-photo" id="resultPhoto" src="images/result.png" alt="">
     </div>
 
     <button class="spin-btn" id="spinBtn">룰렛 돌리기</button>
@@ -163,6 +184,7 @@
     const wheel = document.getElementById('wheel');
     const spinBtn = document.getElementById('spinBtn');
     const result = document.getElementById('result');
+    const resultPhoto = document.getElementById('resultPhoto');
     const nextBtn = document.getElementById('nextBtn');
 
     nextBtn.addEventListener('click', () => {
@@ -174,6 +196,7 @@
     spinBtn.addEventListener('click', () => {
       spinBtn.disabled = true;
       result.innerHTML = '';
+      resultPhoto.classList.remove('show');
 
       // 4번 항목(270~360도 구간) 중심이 45도이므로,
       // 최종 회전각을 mod 360 기준 35~55도 사이로 맞추면 항상 4번에서 멈춘다.
@@ -189,6 +212,10 @@
       setTimeout(() => {
         result.innerHTML = '축하합니다! 🎉<br>최고미녀 다은님과의 데이트가 성사되셨습니다.';
         spinBtn.disabled = false;
+
+        setTimeout(() => {
+          resultPhoto.classList.add('show');
+        }, 1500);
       }, 4000);
     });
   </script>
