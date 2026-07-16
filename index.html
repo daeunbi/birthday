@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>생일초대장</title>
 <style>
+  /* ====== 여기부터 디자인 커스텀 영역 (자유롭게 수정하세요) ====== */
+  :root {
+    --bg-color: #fff;
+    --font-family: sans-serif;
+    --text-color: #222;
+  }
+  /* ====== 여기까지 ====== */
+
   body {
     margin: 0;
     height: 100vh;
@@ -13,26 +21,57 @@
     align-items: center;
     justify-content: center;
     gap: 24px;
-    background: #fff;
-    font-family: sans-serif;
+    background: var(--bg-color);
+    font-family: var(--font-family);
+    color: var(--text-color);
   }
   h1 {
     font-size: 28px;
   }
-  .next-btn {
-    padding: 14px 32px;
-    font-size: 18px;
+  .cake-btn {
+    background: none;
     border: none;
-    border-radius: 999px;
-    background: #ff5c8a;
-    color: #fff;
-    text-decoration: none;
+    cursor: pointer;
+    font-size: 90px;
+    line-height: 1;
+    padding: 0;
+    position: relative;
+  }
+  .flame {
+    display: inline-block;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .flame.blown-out {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.6);
+  }
+  .hint {
+    font-size: 14px;
+    opacity: 0.6;
   }
 </style>
 </head>
 <body>
   <h1>생일초대장 1페이지</h1>
   <img src="images/example.jpg" alt="사진" style="max-width: 80%; display:none;">
-  <a class="next-btn" href="page2.html">다음으로 →</a>
+
+  <button class="cake-btn" id="cakeBtn" aria-label="케이크 촛불 끄기">
+    🎂<span class="flame" id="flame">🔥</span>
+  </button>
+  <p class="hint">케이크를 눌러 촛불을 꺼주세요</p>
+
+  <script>
+    const cakeBtn = document.getElementById('cakeBtn');
+    const flame = document.getElementById('flame');
+
+    cakeBtn.addEventListener('click', () => {
+      if (cakeBtn.disabled) return;
+      cakeBtn.disabled = true;
+      flame.classList.add('blown-out');
+      setTimeout(() => {
+        window.location.href = 'page2.html';
+      }, 500);
+    });
+  </script>
 </body>
 </html>
