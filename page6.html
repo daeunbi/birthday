@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생일초대장 - 6</title>
+<style>
+  /* ====== 여기부터 디자인 커스텀 영역 (자유롭게 수정하세요) ====== */
+  :root {
+    --bg-color: #fff;
+    --font-family: sans-serif;
+    --text-color: #222;
+    --bg-image: url('images/6.png');
+  }
+  /* ====== 여기까지 ====== */
+
+  html, body {
+    margin: 0;
+    height: 100%;
+  }
+
+  body {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    background-image: var(--bg-image);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: var(--font-family);
+    color: var(--text-color);
+  }
+
+  .gift-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    background: none;
+    border: none;
+    font-size: 130px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.12s ease, opacity 0.35s ease;
+  }
+  .gift-btn.burst {
+    transform: translate(-50%, -50%) scale(2.4) rotate(0deg);
+    opacity: 0;
+  }
+  .gift-btn.hidden {
+    display: none;
+  }
+
+  .spark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 28px;
+    opacity: 1;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+  }
+  .spark.fly {
+    opacity: 0;
+  }
+
+  .gift-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 78%;
+    max-width: 340px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .gift-popup.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+</style>
+</head>
+<body>
+  <button class="gift-btn" id="giftBtn" aria-label="선물 열기">🎁</button>
+  <img class="gift-popup" id="giftPopup" src="images/gift-popup.png" alt="">
+
+  <script>
+    const giftBtn = document.getElementById('giftBtn');
+    const giftPopup = document.getElementById('giftPopup');
+
+    const TAPS_NEEDED = 20;
+    let taps = 0;
+    let opened = false;
+
+    function spawnSpark() {
+      const spark = document.createElement('span');
+      spark.className = 'spark';
+      spark.textContent = ['✨', '🎉', '⭐'][Math.floor(Math.random() * 3)];
+      document.body.appendChild(spark);
+
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 90 + Math.random() * 60;
+      const dx = Math.cos(angle) * distance;
+      const dy = Math.sin(angle) * distance;
+
+      requestAnimationFrame(() => {
+        spark.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        spark.classList.add('fly');
+      });
+
+      setTimeout(() => spark.remove(), 650);
+    }
+
+    giftBtn.addEventListener('click', () => {
+      if (opened) return;
+      taps++;
+
+      const scale = 1 + taps * 0.045;
+      const wiggle = (taps % 2 === 0 ? 1 : -1) * (6 + Math.random() * 6);
+      giftBtn.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${wiggle}deg)`;
+
+      if (taps >= TAPS_NEEDED) {
+        opened = true;
+        for (let i = 0; i < 10; i++) spawnSpark();
+
+        giftBtn.classList.add('burst');
+        setTimeout(() => {
+          giftBtn.classList.add('hidden');
+          giftPopup.classList.add('show');
+        }, 350);
+      }
+    });
+  </script>
+</body>
+</html>
