@@ -10,7 +10,7 @@
     --bg-color: #fff;
     --font-family: sans-serif;
     --text-color: #222;
-    --bg-image: none;
+    --bg-image: url('images/9.png');
   }
   /* ====== 여기까지 ====== */
 
@@ -20,7 +20,9 @@
   }
 
   body {
+    position: relative;
     min-height: 100vh;
+    overflow: hidden;
     background-color: var(--bg-color);
     background-image: var(--bg-image);
     background-position: center;
@@ -29,8 +31,99 @@
     font-family: var(--font-family);
     color: var(--text-color);
   }
+
+  .dance-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    transform-origin: 50% 65%;
+    animation: dance 1.1s ease-in-out infinite;
+  }
+
+  @keyframes dance {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    25% { transform: translateY(-1%) rotate(2deg); }
+    50% { transform: translateY(0) rotate(4deg); }
+    75% { transform: translateY(-1%) rotate(-2deg); }
+  }
+
+  .next-btn {
+    position: absolute;
+    left: 78.8%;
+    top: 81.8%;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    padding: 0;
+  }
 </style>
 </head>
 <body>
+  <img class="dance-popup" src="images/춤팝업.png" alt="">
+
+  <button class="next-btn" id="nextBtn">처음으로</button>
+
+  <audio id="bgMusic" src="mp3/생일축하.mp3" loop></audio>
+
+  <script>
+    const nextBtn = document.getElementById('nextBtn');
+    const bgMusic = document.getElementById('bgMusic');
+
+    const bgTrack = bgMusic.getAttribute('src');
+
+    (function resumeBgMusic() {
+      const savedTrack = sessionStorage.getItem('bgMusicTrack');
+      const savedTime = parseFloat(sessionStorage.getItem('bgMusicTime') || '0');
+      const savedTimestamp = parseFloat(sessionStorage.getItem('bgMusicTimestamp') || '0');
+      if (savedTrack !== bgTrack || !savedTimestamp) return;
+
+      const applyTime = () => {
+        let t = savedTime + (Date.now() - savedTimestamp) / 1000;
+        if (bgMusic.duration && isFinite(bgMusic.duration)) {
+          t = t % bgMusic.duration;
+        }
+        bgMusic.currentTime = t;
+      };
+      if (bgMusic.readyState >= 1) {
+        applyTime();
+      } else {
+        bgMusic.addEventListener('loadedmetadata', applyTime, { once: true });
+      }
+    })();
+
+    function tryPlayBgMusic() {
+      bgMusic.play().catch(() => {});
+    }
+    tryPlayBgMusic();
+    document.addEventListener('click', tryPlayBgMusic, { once: true });
+    document.addEventListener('touchstart', tryPlayBgMusic, { once: true });
+
+    window.addEventListener('pagehide', () => {
+      sessionStorage.setItem('bgMusicTrack', bgTrack);
+      sessionStorage.setItem('bgMusicTime', bgMusic.currentTime);
+      sessionStorage.setItem('bgMusicTimestamp', Date.now());
+    });
+
+    document.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        new Audio('mp3/버튼.mp3').play().catch(() => {});
+      });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 150);
+    });
+  </script>
 </body>
 </html>
