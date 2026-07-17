@@ -60,59 +60,66 @@
 
   .shell-game {
     position: absolute;
-    top: 68%;
+    top: 66%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
-    max-width: 380px;
-    height: 110px;
+    display: grid;
+    grid-template-columns: repeat(3, 84px);
+    grid-template-rows: repeat(3, 84px);
+    gap: 10px;
   }
 
-  .cup {
-    position: absolute;
-    top: 50%;
-    width: 90px;
-    height: 90px;
-    transform: translate(-50%, -50%);
+  .box {
+    position: relative;
+    width: 84px;
+    height: 84px;
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: left 0.14s ease-in-out;
   }
-  .cup:disabled {
+  .box:disabled {
     cursor: default;
   }
-  .cup .cup-box,
-  .cup .cup-result {
-    display: block;
-    font-size: 64px;
-    line-height: 1;
+  .box .box-face,
+  .box .box-result {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .cup .cup-result {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+  .box .box-result {
     opacity: 0;
     transform: scale(0.3);
   }
-  .cup.opened .cup-box {
+  .box.opened .box-face {
     opacity: 0;
     transform: scale(0.6) translateY(-10px);
   }
-  .cup.opened .cup-result {
+  .box.opened .box-result {
     opacity: 1;
     transform: scale(1);
   }
-  .cup.wrong {
-    opacity: 0.4;
+  .box.wrong {
+    opacity: 0.85;
+  }
+
+  .pix-icon {
+    display: grid;
+    grid-template-columns: repeat(8, 8px);
+    grid-template-rows: repeat(8, 8px);
+  }
+  .pix-icon i {
+    display: block;
+    width: 8px;
+    height: 8px;
   }
 
   .spark {
     position: absolute;
-    top: 68%;
+    top: 66%;
     left: 50%;
     font-size: 28px;
     opacity: 1;
@@ -166,20 +173,17 @@
 </head>
 <body>
   <div class="shell-wrap" id="shellWrap">
-    <p class="shell-hint" id="shellHint"></p>
+    <p class="shell-hint">원하는 상자를 선택해주세요.</p>
     <div class="shell-game" id="shellGame">
-      <button class="cup" id="cup0" disabled>
-        <span class="cup-box">📦</span>
-        <span class="cup-result"></span>
-      </button>
-      <button class="cup" id="cup1" disabled>
-        <span class="cup-box">📦</span>
-        <span class="cup-result"></span>
-      </button>
-      <button class="cup" id="cup2" disabled>
-        <span class="cup-box">📦</span>
-        <span class="cup-result"></span>
-      </button>
+      <button class="box" id="box0"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box1"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box2"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box3"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box4"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box5"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box6"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box7"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box8"><span class="box-face"></span><span class="box-result"></span></button>
     </div>
   </div>
 
@@ -190,8 +194,7 @@
 
   <script>
     const shellWrap = document.getElementById('shellWrap');
-    const shellHint = document.getElementById('shellHint');
-    const cups = [0, 1, 2].map((i) => document.getElementById('cup' + i));
+    const boxes = Array.from({ length: 9 }, (_, i) => document.getElementById('box' + i));
     const giftPopup = document.getElementById('giftPopup');
     const nextBtn = document.getElementById('nextBtn');
     const bgMusic = document.getElementById('bgMusic');
@@ -272,46 +275,35 @@
       }, 150);
     });
 
-    const POSITIONS = [18, 50, 82];
-    let slots = [0, 1, 2];
+    // 8x8 픽셀 아이콘: '.'은 투명, 나머지 글자는 팔레트 색상
+    const PIX_PALETTES = {
+      box: { B: '#3b2412', M: '#c98a4a', L: '#e6ac74', T: '#7a4a20' },
+      gift: { G: '#f4c542', g: '#caa02c', r: '#b8362c', R: '#e2483c' },
+      lose: { B: '#555555', M: '#9a9a9a', L: '#c4c4c4', X: '#222222' },
+    };
+    const PIX_PATTERNS = {
+      box: ['.BBBBBB.', 'BLLLLLLB', 'BMMTTMMB', 'BMMTTMMB', 'BMMTTMMB', 'BMMTTMMB', 'BMMTTMMB', '.BBBBBB.'],
+      gift: ['..GGGG..', '.Gg..gG.', 'rrrrrrrr', 'RRGGGGRR', 'RRGGGGRR', 'RRGGGGRR', 'RRGGGGRR', 'rrrrrrrr'],
+      lose: ['.BBBBBB.', 'BLLLLLLB', 'BMX..XMB', 'BM.XX.MB', 'BM.XX.MB', 'BMX..XMB', 'BMMMMMMB', '.BBBBBB.'],
+    };
 
-    function layoutCups() {
-      cups.forEach((cup, i) => {
-        cup.style.left = POSITIONS[slots[i]] + '%';
+    function makePixIcon(type) {
+      const wrap = document.createElement('div');
+      wrap.className = 'pix-icon';
+      const palette = PIX_PALETTES[type];
+      PIX_PATTERNS[type].forEach((row) => {
+        for (const ch of row) {
+          const cell = document.createElement('i');
+          if (ch !== '.') cell.style.background = palette[ch];
+          wrap.appendChild(cell);
+        }
       });
-    }
-    layoutCups();
-
-    const giftCupIndex = Math.floor(Math.random() * 3);
-    let shuffling = true;
-    let gameOver = false;
-
-    function swapRandomPair() {
-      const a = Math.floor(Math.random() * 3);
-      let b = Math.floor(Math.random() * 3);
-      while (b === a) b = Math.floor(Math.random() * 3);
-      const tmp = slots[a];
-      slots[a] = slots[b];
-      slots[b] = tmp;
-      layoutCups();
+      return wrap;
     }
 
-    const TOTAL_SHUFFLES = 16;
-    const SHUFFLE_INTERVAL = 140;
-    let shuffleStep = 0;
-
-    function runShuffle() {
-      swapRandomPair();
-      shuffleStep++;
-      if (shuffleStep < TOTAL_SHUFFLES) {
-        setTimeout(runShuffle, SHUFFLE_INTERVAL);
-      } else {
-        shuffling = false;
-        cups.forEach((cup) => { cup.disabled = false; });
-        shellHint.textContent = '원하는 상자를 선택해주세요.';
-      }
-    }
-    setTimeout(runShuffle, 700);
+    boxes.forEach((box) => {
+      box.querySelector('.box-face').appendChild(makePixIcon('box'));
+    });
 
     function spawnSpark() {
       const spark = document.createElement('span');
@@ -332,17 +324,22 @@
       setTimeout(() => spark.remove(), 650);
     }
 
-    cups.forEach((cup, i) => {
-      cup.addEventListener('click', () => {
-        if (shuffling || gameOver || cup.classList.contains('opened')) return;
+    const TOTAL_TRIES = 3;
+    let attempts = 0;
+    let gameOver = false;
 
-        const hasGift = i === giftCupIndex;
-        cup.querySelector('.cup-result').textContent = hasGift ? '🎁' : '💨';
-        cup.classList.add('opened');
+    boxes.forEach((box) => {
+      box.addEventListener('click', () => {
+        if (gameOver || box.classList.contains('opened')) return;
 
-        if (hasGift) {
+        attempts++;
+        const isWin = attempts >= TOTAL_TRIES;
+        box.querySelector('.box-result').appendChild(makePixIcon(isWin ? 'gift' : 'lose'));
+        box.classList.add('opened');
+
+        if (isWin) {
           gameOver = true;
-          cups.forEach((c) => { c.disabled = true; });
+          boxes.forEach((b) => { b.disabled = true; });
           new Audio('mp3/당첨.mp3').play().catch(() => {});
           for (let s = 0; s < 10; s++) spawnSpark();
 
@@ -352,8 +349,8 @@
             nextBtn.classList.add('show');
           }, 1700);
         } else {
-          cup.classList.add('wrong');
-          cup.disabled = true;
+          box.classList.add('wrong');
+          box.disabled = true;
           playBoosted('mp3/꽝.mp3', 2.5);
         }
       });
