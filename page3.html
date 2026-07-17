@@ -55,12 +55,40 @@
     const nextBtn = document.getElementById('nextBtn');
     const bgMusic = document.getElementById('bgMusic');
 
+    const bgTrack = bgMusic.getAttribute('src');
+
+    (function resumeBgMusic() {
+      const savedTrack = sessionStorage.getItem('bgMusicTrack');
+      const savedTime = parseFloat(sessionStorage.getItem('bgMusicTime') || '0');
+      const savedTimestamp = parseFloat(sessionStorage.getItem('bgMusicTimestamp') || '0');
+      if (savedTrack !== bgTrack || !savedTimestamp) return;
+
+      const applyTime = () => {
+        let t = savedTime + (Date.now() - savedTimestamp) / 1000;
+        if (bgMusic.duration && isFinite(bgMusic.duration)) {
+          t = t % bgMusic.duration;
+        }
+        bgMusic.currentTime = t;
+      };
+      if (bgMusic.readyState >= 1) {
+        applyTime();
+      } else {
+        bgMusic.addEventListener('loadedmetadata', applyTime, { once: true });
+      }
+    })();
+
     function tryPlayBgMusic() {
       bgMusic.play().catch(() => {});
     }
     tryPlayBgMusic();
     document.addEventListener('click', tryPlayBgMusic, { once: true });
     document.addEventListener('touchstart', tryPlayBgMusic, { once: true });
+
+    window.addEventListener('pagehide', () => {
+      sessionStorage.setItem('bgMusicTrack', bgTrack);
+      sessionStorage.setItem('bgMusicTime', bgMusic.currentTime);
+      sessionStorage.setItem('bgMusicTimestamp', Date.now());
+    });
 
     document.querySelectorAll('button').forEach((btn) => {
       btn.addEventListener('click', () => {
