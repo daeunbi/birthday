@@ -37,20 +37,6 @@
     color: var(--text-color);
   }
 
-  .next-btn {
-    position: absolute;
-    left: 78.8%;
-    top: 81.8%;
-    transform: translate(-50%, -50%);
-    background: none;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    padding: 0;
-  }
-
   .content {
     display: flex;
     flex-direction: column;
@@ -171,8 +157,6 @@
     <button class="spin-btn" id="spinBtn">룰렛 돌리기</button>
   </div>
 
-  <button class="next-btn" id="nextBtn">다음으로</button>
-
   <audio id="bgMusic" src="mp3/룰렛.mp3" loop></audio>
 
   <script>
@@ -180,7 +164,6 @@
     const spinBtn = document.getElementById('spinBtn');
     const title = document.querySelector('.title');
     const resultPhoto = document.getElementById('resultPhoto');
-    const nextBtn = document.getElementById('nextBtn');
     const bgMusic = document.getElementById('bgMusic');
 
     const bgTrack = bgMusic.getAttribute('src');
@@ -224,15 +207,17 @@
       });
     });
 
-    nextBtn.addEventListener('click', () => {
-      setTimeout(() => {
-        window.location.href = 'page3.html';
-      }, 150);
-    });
-
     let currentRotation = 0;
+    let gameWon = false;
 
     spinBtn.addEventListener('click', () => {
+      if (gameWon) {
+        setTimeout(() => {
+          window.location.href = 'page3.html';
+        }, 150);
+        return;
+      }
+
       spinBtn.disabled = true;
       resultPhoto.classList.remove('show');
 
@@ -250,6 +235,8 @@
       setTimeout(() => {
         title.innerHTML = '<p>축하합니다! 🎉</p><p>최고미녀 다은님과의 데이트가 성사되셨습니다.</p>';
         spinBtn.disabled = false;
+        spinBtn.textContent = '다음으로';
+        gameWon = true;
 
         setTimeout(() => {
           resultPhoto.classList.add('show');
