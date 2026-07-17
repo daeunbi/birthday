@@ -148,13 +148,6 @@
     cursor: default;
   }
 
-  .result {
-    margin-top: -26px;
-    font-size: 18px;
-    font-weight: bold;
-    min-height: 24px;
-    text-align: center;
-  }
 </style>
 </head>
 <body>
@@ -176,7 +169,6 @@
     </div>
 
     <button class="spin-btn" id="spinBtn">룰렛 돌리기</button>
-    <p class="result" id="result"></p>
   </div>
 
   <button class="next-btn" id="nextBtn">다음으로</button>
@@ -186,7 +178,7 @@
   <script>
     const wheel = document.getElementById('wheel');
     const spinBtn = document.getElementById('spinBtn');
-    const result = document.getElementById('result');
+    const title = document.querySelector('.title');
     const resultPhoto = document.getElementById('resultPhoto');
     const nextBtn = document.getElementById('nextBtn');
     const bgMusic = document.getElementById('bgMusic');
@@ -242,7 +234,6 @@
 
     spinBtn.addEventListener('click', () => {
       spinBtn.disabled = true;
-      result.innerHTML = '';
       resultPhoto.classList.remove('show');
 
       // 4번 항목(270~360도 구간) 중심이 45도이므로,
@@ -257,7 +248,7 @@
       wheel.style.transform = `rotate(${currentRotation}deg)`;
 
       setTimeout(() => {
-        result.innerHTML = '축하합니다! 🎉<br>최고미녀 다은님과의 데이트가 성사되셨습니다.';
+        title.innerHTML = '<p>축하합니다! 🎉</p><p>최고미녀 다은님과의 데이트가 성사되셨습니다.</p>';
         spinBtn.disabled = false;
 
         setTimeout(() => {
