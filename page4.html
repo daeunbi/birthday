@@ -118,6 +118,12 @@
     const masks = Array.from(document.querySelectorAll('.row-mask'));
     const nextBtn = document.getElementById('nextBtn');
 
+    document.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        new Audio('mp3/버튼.mp3').play().catch(() => {});
+      });
+    });
+
     checkBtns.forEach((btn, i) => {
       if (i > 0) btn.disabled = true;
 

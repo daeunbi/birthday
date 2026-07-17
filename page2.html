@@ -188,6 +188,12 @@
     const resultPhoto = document.getElementById('resultPhoto');
     const nextBtn = document.getElementById('nextBtn');
 
+    document.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        new Audio('mp3/버튼.mp3').play().catch(() => {});
+      });
+    });
+
     nextBtn.addEventListener('click', () => {
       window.location.href = 'page3.html';
     });

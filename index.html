@@ -73,8 +73,24 @@
     <p class="hint">초대장을 클릭해주세요.</p>
   </div>
 
+  <audio id="bgMusic" src="mp3/생일축하.mp3" loop></audio>
+
   <script>
     const letterBtn = document.getElementById('letterBtn');
+    const bgMusic = document.getElementById('bgMusic');
+
+    function tryPlayBgMusic() {
+      bgMusic.play().catch(() => {});
+    }
+    tryPlayBgMusic();
+    document.addEventListener('click', tryPlayBgMusic, { once: true });
+    document.addEventListener('touchstart', tryPlayBgMusic, { once: true });
+
+    document.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        new Audio('mp3/버튼.mp3').play().catch(() => {});
+      });
+    });
 
     letterBtn.addEventListener('click', () => {
       if (letterBtn.disabled) return;
