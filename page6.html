@@ -196,19 +196,33 @@
     const nextBtn = document.getElementById('nextBtn');
     const bgMusic = document.getElementById('bgMusic');
 
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const boostedCtx = AudioCtx ? new AudioCtx() : null;
+    const boostedBuffers = {};
+
+    function preloadBoosted(src) {
+      if (!boostedCtx) return;
+      fetch(src)
+        .then((res) => res.arrayBuffer())
+        .then((data) => boostedCtx.decodeAudioData(data))
+        .then((buffer) => { boostedBuffers[src] = buffer; })
+        .catch(() => {});
+    }
+    preloadBoosted('mp3/꽝.mp3');
+
     function playBoosted(src, gain) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      const audio = new Audio(src);
-      try {
-        const ctx = new AudioCtx();
-        const source = ctx.createMediaElementSource(audio);
-        const gainNode = ctx.createGain();
-        gainNode.gain.value = gain;
-        source.connect(gainNode).connect(ctx.destination);
-        audio.play().catch(() => {});
-      } catch (e) {
-        audio.play().catch(() => {});
+      const buffer = boostedBuffers[src];
+      if (!boostedCtx || !buffer) {
+        new Audio(src).play().catch(() => {});
+        return;
       }
+      if (boostedCtx.state === 'suspended') boostedCtx.resume();
+      const source = boostedCtx.createBufferSource();
+      source.buffer = buffer;
+      const gainNode = boostedCtx.createGain();
+      gainNode.gain.value = gain;
+      source.connect(gainNode).connect(boostedCtx.destination);
+      source.start(0);
     }
 
     const bgTrack = bgMusic.getAttribute('src');
