@@ -35,21 +35,25 @@
     position: absolute;
     width: 34px;
     height: 34px;
-    transform: translate(-50%, -50%) scale(0.6);
+    transform: translate(-50%, -50%);
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
-    font-size: 20px;
-    line-height: 34px;
-    text-align: center;
-    color: #ff5c8a;
-    opacity: 0;
-    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .check-btn.checked {
+  .check-btn svg {
+    width: 28px;
+    height: 28px;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .check-btn.checked svg {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
   }
   .check-btn:disabled {
     cursor: default;
@@ -58,7 +62,7 @@
   .row-mask {
     position: absolute;
     left: 12%;
-    width: 76%;
+    width: 68%;
     height: 7.6%;
     transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.75);
@@ -96,11 +100,11 @@
 </style>
 </head>
 <body>
-  <button class="check-btn" style="left:17.1%; top:34.3%;">✔</button>
-  <button class="check-btn" style="left:17.1%; top:42.3%;">✔</button>
-  <button class="check-btn" style="left:17.1%; top:50.4%;">✔</button>
-  <button class="check-btn" style="left:17.1%; top:58.5%;">✔</button>
-  <button class="check-btn" style="left:17.1%; top:66.5%;">✔</button>
+  <button class="check-btn" style="left:17.1%; top:34.3%;"><svg viewBox="0 0 24 24"><path d="M7 7 L12 12 L21 3" stroke="#e02020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>
+  <button class="check-btn" style="left:17.1%; top:42.3%;"><svg viewBox="0 0 24 24"><path d="M7 7 L12 12 L21 3" stroke="#e02020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>
+  <button class="check-btn" style="left:17.1%; top:50.4%;"><svg viewBox="0 0 24 24"><path d="M7 7 L12 12 L21 3" stroke="#e02020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>
+  <button class="check-btn" style="left:17.1%; top:58.5%;"><svg viewBox="0 0 24 24"><path d="M7 7 L12 12 L21 3" stroke="#e02020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>
+  <button class="check-btn" style="left:17.1%; top:66.5%;"><svg viewBox="0 0 24 24"><path d="M7 7 L12 12 L21 3" stroke="#e02020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></button>
 
   <div class="row-mask" style="top:42.3%;"></div>
   <div class="row-mask" style="top:50.4%;"></div>
