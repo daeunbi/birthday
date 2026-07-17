@@ -325,6 +325,7 @@
         } else {
           cup.classList.add('wrong');
           cup.disabled = true;
+          new Audio('mp3/꽝.mp3').play().catch(() => {});
         }
       });
     });
