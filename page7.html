@@ -47,7 +47,7 @@
 
   .shell-hint {
     position: absolute;
-    top: 42%;
+    top: 34%;
     left: 50%;
     transform: translateX(-50%);
     margin: 0;
@@ -60,7 +60,7 @@
 
   .shell-game {
     position: absolute;
-    top: 66%;
+    top: 58%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: grid;
@@ -90,6 +90,12 @@
     justify-content: center;
     transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+  .box .box-face img,
+  .box .box-result img {
+    width: 70px;
+    height: 70px;
+    image-rendering: pixelated;
+  }
   .box .box-result {
     opacity: 0;
     transform: scale(0.3);
@@ -106,20 +112,9 @@
     opacity: 0.85;
   }
 
-  .pix-icon {
-    display: grid;
-    grid-template-columns: repeat(8, 8px);
-    grid-template-rows: repeat(8, 8px);
-  }
-  .pix-icon i {
-    display: block;
-    width: 8px;
-    height: 8px;
-  }
-
   .spark {
     position: absolute;
-    top: 66%;
+    top: 58%;
     left: 50%;
     font-size: 28px;
     opacity: 1;
@@ -175,15 +170,15 @@
   <div class="shell-wrap" id="shellWrap">
     <p class="shell-hint">원하는 상자를 선택해주세요.</p>
     <div class="shell-game" id="shellGame">
-      <button class="box" id="box0"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box1"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box2"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box3"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box4"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box5"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box6"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box7"><span class="box-face"></span><span class="box-result"></span></button>
-      <button class="box" id="box8"><span class="box-face"></span><span class="box-result"></span></button>
+      <button class="box" id="box0"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box1"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box2"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box3"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box4"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box5"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box6"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box7"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
+      <button class="box" id="box8"><span class="box-face"><img src="images/box-icon.png" alt=""></span><span class="box-result"></span></button>
     </div>
   </div>
 
@@ -275,35 +270,17 @@
       }, 150);
     });
 
-    // 8x8 픽셀 아이콘: '.'은 투명, 나머지 글자는 팔레트 색상
-    const PIX_PALETTES = {
-      box: { B: '#3b2412', M: '#c98a4a', L: '#e6ac74', T: '#7a4a20' },
-      gift: { G: '#f4c542', g: '#caa02c', r: '#b8362c', R: '#e2483c' },
-      lose: { B: '#555555', M: '#9a9a9a', L: '#c4c4c4', X: '#222222' },
-    };
-    const PIX_PATTERNS = {
-      box: ['.BBBBBB.', 'BLLLLLLB', 'BMMTTMMB', 'BMMTTMMB', 'BMMTTMMB', 'BMMTTMMB', 'BMMTTMMB', '.BBBBBB.'],
-      gift: ['..GGGG..', '.Gg..gG.', 'rrrrrrrr', 'RRGGGGRR', 'RRGGGGRR', 'RRGGGGRR', 'RRGGGGRR', 'rrrrrrrr'],
-      lose: ['.BBBBBB.', 'BLLLLLLB', 'BMX..XMB', 'BM.XX.MB', 'BM.XX.MB', 'BMX..XMB', 'BMMMMMMB', '.BBBBBB.'],
+    const ICON_SRC = {
+      gift: 'images/gift-icon.png',
+      lose: 'images/lose-icon.png',
     };
 
-    function makePixIcon(type) {
-      const wrap = document.createElement('div');
-      wrap.className = 'pix-icon';
-      const palette = PIX_PALETTES[type];
-      PIX_PATTERNS[type].forEach((row) => {
-        for (const ch of row) {
-          const cell = document.createElement('i');
-          if (ch !== '.') cell.style.background = palette[ch];
-          wrap.appendChild(cell);
-        }
-      });
-      return wrap;
+    function makeIcon(type) {
+      const img = document.createElement('img');
+      img.src = ICON_SRC[type];
+      img.alt = '';
+      return img;
     }
-
-    boxes.forEach((box) => {
-      box.querySelector('.box-face').appendChild(makePixIcon('box'));
-    });
 
     function spawnSpark() {
       const spark = document.createElement('span');
@@ -334,7 +311,7 @@
 
         attempts++;
         const isWin = attempts >= TOTAL_TRIES;
-        box.querySelector('.box-result').appendChild(makePixIcon(isWin ? 'gift' : 'lose'));
+        box.querySelector('.box-result').appendChild(makeIcon(isWin ? 'gift' : 'lose'));
         box.classList.add('opened');
 
         if (isWin) {
