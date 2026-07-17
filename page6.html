@@ -196,6 +196,21 @@
     const nextBtn = document.getElementById('nextBtn');
     const bgMusic = document.getElementById('bgMusic');
 
+    function playBoosted(src, gain) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const audio = new Audio(src);
+      try {
+        const ctx = new AudioCtx();
+        const source = ctx.createMediaElementSource(audio);
+        const gainNode = ctx.createGain();
+        gainNode.gain.value = gain;
+        source.connect(gainNode).connect(ctx.destination);
+        audio.play().catch(() => {});
+      } catch (e) {
+        audio.play().catch(() => {});
+      }
+    }
+
     const bgTrack = bgMusic.getAttribute('src');
 
     (function resumeBgMusic() {
@@ -325,7 +340,7 @@
         } else {
           cup.classList.add('wrong');
           cup.disabled = true;
-          new Audio('mp3/꽝.mp3').play().catch(() => {});
+          playBoosted('mp3/꽝.mp3', 2.5);
         }
       });
     });
