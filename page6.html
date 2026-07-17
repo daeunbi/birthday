@@ -166,7 +166,7 @@
 </head>
 <body>
   <div class="shell-wrap" id="shellWrap">
-    <p class="shell-hint" id="shellHint">선물이 어디 있을까요? 잘 보세요!</p>
+    <p class="shell-hint" id="shellHint"></p>
     <div class="shell-game" id="shellGame">
       <button class="cup" id="cup0" disabled>
         <span class="cup-box">📦</span>
@@ -186,12 +186,50 @@
   <img class="gift-popup" id="giftPopup" src="images/gift-popup.png" alt="">
   <button class="next-btn" id="nextBtn">다음으로</button>
 
+  <audio id="bgMusic" src="mp3/룰렛.mp3" loop></audio>
+
   <script>
     const shellWrap = document.getElementById('shellWrap');
     const shellHint = document.getElementById('shellHint');
     const cups = [0, 1, 2].map((i) => document.getElementById('cup' + i));
     const giftPopup = document.getElementById('giftPopup');
     const nextBtn = document.getElementById('nextBtn');
+    const bgMusic = document.getElementById('bgMusic');
+
+    const bgTrack = bgMusic.getAttribute('src');
+
+    (function resumeBgMusic() {
+      const savedTrack = sessionStorage.getItem('bgMusicTrack');
+      const savedTime = parseFloat(sessionStorage.getItem('bgMusicTime') || '0');
+      const savedTimestamp = parseFloat(sessionStorage.getItem('bgMusicTimestamp') || '0');
+      if (savedTrack !== bgTrack || !savedTimestamp) return;
+
+      const applyTime = () => {
+        let t = savedTime + (Date.now() - savedTimestamp) / 1000;
+        if (bgMusic.duration && isFinite(bgMusic.duration)) {
+          t = t % bgMusic.duration;
+        }
+        bgMusic.currentTime = t;
+      };
+      if (bgMusic.readyState >= 1) {
+        applyTime();
+      } else {
+        bgMusic.addEventListener('loadedmetadata', applyTime, { once: true });
+      }
+    })();
+
+    function tryPlayBgMusic() {
+      bgMusic.play().catch(() => {});
+    }
+    tryPlayBgMusic();
+    document.addEventListener('click', tryPlayBgMusic, { once: true });
+    document.addEventListener('touchstart', tryPlayBgMusic, { once: true });
+
+    window.addEventListener('pagehide', () => {
+      sessionStorage.setItem('bgMusicTrack', bgTrack);
+      sessionStorage.setItem('bgMusicTime', bgMusic.currentTime);
+      sessionStorage.setItem('bgMusicTimestamp', Date.now());
+    });
 
     document.querySelectorAll('button').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -278,7 +316,6 @@
           cups.forEach((c) => { c.disabled = true; });
           new Audio('mp3/당첨.mp3').play().catch(() => {});
           for (let s = 0; s < 10; s++) spawnSpark();
-          shellHint.textContent = '';
 
           setTimeout(() => {
             shellWrap.classList.add('finished');
