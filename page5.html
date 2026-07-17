@@ -113,10 +113,20 @@
 
   <button class="next-btn" id="nextBtn">다음으로</button>
 
+  <audio id="bgMusic" src="mp3/일정.mp3" loop></audio>
+
   <script>
     const checkBtns = Array.from(document.querySelectorAll('.check-btn'));
     const masks = Array.from(document.querySelectorAll('.row-mask'));
     const nextBtn = document.getElementById('nextBtn');
+    const bgMusic = document.getElementById('bgMusic');
+
+    function tryPlayBgMusic() {
+      bgMusic.play().catch(() => {});
+    }
+    tryPlayBgMusic();
+    document.addEventListener('click', tryPlayBgMusic, { once: true });
+    document.addEventListener('touchstart', tryPlayBgMusic, { once: true });
 
     document.querySelectorAll('button').forEach((btn) => {
       btn.addEventListener('click', () => {
