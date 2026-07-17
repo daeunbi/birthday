@@ -130,8 +130,7 @@
     left: 50%;
     width: 94%;
     max-width: 420px;
-    aspect-ratio: 1081 / 1528;
-    overflow: hidden;
+    height: auto;
     transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
     pointer-events: none;
@@ -140,14 +139,6 @@
   .gift-popup.show {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
-  }
-  .gift-popup img {
-    position: absolute;
-    left: -6.48%;
-    top: -5.89%;
-    width: 109.07%;
-    height: 136.13%;
-    display: block;
   }
 
   .next-btn {
@@ -192,9 +183,7 @@
     </div>
   </div>
 
-  <div class="gift-popup" id="giftPopup">
-    <img src="images/6페이지팝업.png" alt="">
-  </div>
+  <img class="gift-popup" id="giftPopup" src="images/6팝업.png" alt="">
   <button class="next-btn" id="nextBtn">다음으로</button>
 
   <audio id="bgMusic" src="mp3/룰렛.mp3" loop></audio>
