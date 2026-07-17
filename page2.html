@@ -181,12 +181,22 @@
 
   <button class="next-btn" id="nextBtn">다음으로</button>
 
+  <audio id="bgMusic" src="mp3/룰렛.mp3" loop></audio>
+
   <script>
     const wheel = document.getElementById('wheel');
     const spinBtn = document.getElementById('spinBtn');
     const result = document.getElementById('result');
     const resultPhoto = document.getElementById('resultPhoto');
     const nextBtn = document.getElementById('nextBtn');
+    const bgMusic = document.getElementById('bgMusic');
+
+    function tryPlayBgMusic() {
+      bgMusic.play().catch(() => {});
+    }
+    tryPlayBgMusic();
+    document.addEventListener('click', tryPlayBgMusic, { once: true });
+    document.addEventListener('touchstart', tryPlayBgMusic, { once: true });
 
     document.querySelectorAll('button').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -224,7 +234,8 @@
 
         setTimeout(() => {
           resultPhoto.classList.add('show');
-        }, 2500);
+          new Audio('mp3/당첨.mp3').play().catch(() => {});
+        }, 2000);
       }, 4000);
     });
   </script>
