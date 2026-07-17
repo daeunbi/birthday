@@ -60,7 +60,7 @@
 
   .shell-game {
     position: absolute;
-    top: 60%;
+    top: 68%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
@@ -112,7 +112,7 @@
 
   .spark {
     position: absolute;
-    top: 60%;
+    top: 68%;
     left: 50%;
     font-size: 28px;
     opacity: 1;
@@ -126,11 +126,12 @@
 
   .gift-popup {
     position: absolute;
-    top: 48%;
+    top: 46%;
     left: 50%;
     width: 94%;
     max-width: 420px;
-    height: auto;
+    aspect-ratio: 1081 / 1528;
+    overflow: hidden;
     transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
     pointer-events: none;
@@ -139,6 +140,14 @@
   .gift-popup.show {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+  }
+  .gift-popup img {
+    position: absolute;
+    left: -6.48%;
+    top: -5.89%;
+    width: 109.07%;
+    height: 136.13%;
+    display: block;
   }
 
   .next-btn {
@@ -183,7 +192,9 @@
     </div>
   </div>
 
-  <img class="gift-popup" id="giftPopup" src="images/선물팝업.png" alt="">
+  <div class="gift-popup" id="giftPopup">
+    <img src="images/6페이지팝업.png" alt="">
+  </div>
   <button class="next-btn" id="nextBtn">다음으로</button>
 
   <audio id="bgMusic" src="mp3/룰렛.mp3" loop></audio>
