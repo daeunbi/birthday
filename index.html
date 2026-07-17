@@ -10,7 +10,7 @@
     --bg-color: #fff;
     --font-family: sans-serif;
     --text-color: #222;
-    --bg-image: url('images/1P.png');
+    --bg-image: url('images/1.png');
   }
   /* ====== 여기까지 ====== */
 
@@ -30,53 +30,39 @@
     color: var(--text-color);
   }
 
-  .overlay {
+  .cake-btn {
     position: absolute;
-    top: 80%;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-
-  .letter-btn {
+    left: 24%;
+    top: 63%;
+    width: 52%;
+    height: 26%;
     background: none;
     border: none;
-    cursor: pointer;
-    font-size: 100px;
-    line-height: 1;
     padding: 0;
-    animation: wiggle 2s ease-in-out infinite;
+    cursor: pointer;
   }
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(-6deg); }
-    50% { transform: rotate(6deg); }
-  }
-  .letter-btn:active {
-    animation-play-state: paused;
-    transform: scale(0.92);
-  }
-  .hint {
+
+  .cake-hint {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
     margin: 0;
     font-size: 17px;
     opacity: 0.7;
+    text-align: center;
+    white-space: nowrap;
   }
 </style>
 </head>
 <body>
-  <div class="overlay">
-    <button class="letter-btn" id="letterBtn" aria-label="편지 열기">
-      💌
-    </button>
-    <p class="hint">초대장을 클릭해주세요.</p>
-  </div>
+  <button class="cake-btn" id="cakeBtn" aria-label="케이크 누르기"></button>
+  <p class="cake-hint">케이크를 눌러주세요.</p>
 
   <audio id="bgMusic" src="mp3/생일축하.mp3" loop></audio>
 
   <script>
-    const letterBtn = document.getElementById('letterBtn');
+    const cakeBtn = document.getElementById('cakeBtn');
     const bgMusic = document.getElementById('bgMusic');
 
     function tryPlayBgMusic() {
@@ -92,9 +78,9 @@
       });
     });
 
-    letterBtn.addEventListener('click', () => {
-      if (letterBtn.disabled) return;
-      letterBtn.disabled = true;
+    cakeBtn.addEventListener('click', () => {
+      if (cakeBtn.disabled) return;
+      cakeBtn.disabled = true;
       setTimeout(() => {
         window.location.href = 'page2.html';
       }, 150);
