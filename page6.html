@@ -83,15 +83,35 @@
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
+
+  .next-btn {
+    position: absolute;
+    left: 78.8%;
+    top: 81.8%;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    padding: 0;
+  }
 </style>
 </head>
 <body>
   <button class="gift-btn" id="giftBtn" aria-label="선물 열기">🎁</button>
   <img class="gift-popup" id="giftPopup" src="images/gift-popup.png" alt="">
+  <button class="next-btn" id="nextBtn">다음으로</button>
 
   <script>
     const giftBtn = document.getElementById('giftBtn');
     const giftPopup = document.getElementById('giftPopup');
+    const nextBtn = document.getElementById('nextBtn');
+
+    nextBtn.addEventListener('click', () => {
+      window.location.href = 'page7.html';
+    });
 
     const TAPS_NEEDED = 20;
     let taps = 0;
