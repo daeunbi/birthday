@@ -31,11 +31,52 @@
     color: var(--text-color);
   }
 
+  .check-btn {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    transform: translate(-50%, -50%) scale(0.6);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 34px;
+    text-align: center;
+    color: #ff5c8a;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .check-btn.checked {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .check-btn:disabled {
+    cursor: default;
+  }
+
+  .row-mask {
+    position: absolute;
+    left: 12%;
+    width: 76%;
+    height: 7.6%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 10px;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .row-mask.revealed {
+    opacity: 0;
+  }
+
   .next-btn {
     position: absolute;
     left: 78.8%;
     top: 81.8%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.7);
     background: none;
     border: none;
     font-size: 16px;
@@ -43,14 +84,55 @@
     color: #333;
     cursor: pointer;
     padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .next-btn.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
   }
 </style>
 </head>
 <body>
+  <button class="check-btn" style="left:17.1%; top:34.3%;">✔</button>
+  <button class="check-btn" style="left:17.1%; top:42.3%;">✔</button>
+  <button class="check-btn" style="left:17.1%; top:50.4%;">✔</button>
+  <button class="check-btn" style="left:17.1%; top:58.5%;">✔</button>
+  <button class="check-btn" style="left:17.1%; top:66.5%;">✔</button>
+
+  <div class="row-mask" style="top:42.3%;"></div>
+  <div class="row-mask" style="top:50.4%;"></div>
+  <div class="row-mask" style="top:58.5%;"></div>
+  <div class="row-mask" style="top:66.5%;"></div>
+
   <button class="next-btn" id="nextBtn">다음으로</button>
 
   <script>
+    const checkBtns = Array.from(document.querySelectorAll('.check-btn'));
+    const masks = Array.from(document.querySelectorAll('.row-mask'));
     const nextBtn = document.getElementById('nextBtn');
+
+    checkBtns.forEach((btn, i) => {
+      if (i > 0) btn.disabled = true;
+
+      btn.addEventListener('click', () => {
+        if (btn.disabled || btn.classList.contains('checked')) return;
+        btn.classList.add('checked');
+        btn.disabled = true;
+
+        if (masks[i]) {
+          masks[i].classList.add('revealed');
+        }
+        if (i + 1 < checkBtns.length) {
+          checkBtns[i + 1].disabled = false;
+        } else {
+          nextBtn.classList.add('show');
+        }
+      });
+    });
+
     nextBtn.addEventListener('click', () => {
       window.location.href = 'page6.html';
     });
