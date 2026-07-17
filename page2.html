@@ -195,7 +195,9 @@
     });
 
     nextBtn.addEventListener('click', () => {
-      window.location.href = 'page3.html';
+      setTimeout(() => {
+        window.location.href = 'page3.html';
+      }, 150);
     });
 
     let currentRotation = 0;

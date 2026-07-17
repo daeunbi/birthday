@@ -95,7 +95,9 @@
     letterBtn.addEventListener('click', () => {
       if (letterBtn.disabled) return;
       letterBtn.disabled = true;
-      window.location.href = 'page2.html';
+      setTimeout(() => {
+        window.location.href = 'page2.html';
+      }, 150);
     });
   </script>
 </body>
