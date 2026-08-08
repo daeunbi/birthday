@@ -11,10 +11,6 @@
     --font-family: sans-serif;
     --text-color: #222;
     --bg-image: url('images/2.png');
-    --sector-1: #ffd1dc;
-    --sector-2: #d1e8ff;
-    --sector-3: #d1ffd6;
-    --sector-4: #fff3b0;
   }
   /* ====== 여기까지 ====== */
 
@@ -26,8 +22,6 @@
   body {
     position: relative;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
     background-color: var(--bg-color);
     background-image: var(--bg-image);
     background-position: center;
@@ -37,133 +31,26 @@
     color: var(--text-color);
   }
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 28px;
-    transform: translateY(-40px);
-  }
-
-  .title {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 1.5;
-  }
-  .title p {
-    margin: 0;
-  }
-
-  .wheel-outer {
-    position: relative;
-    width: 280px;
-    height: 280px;
-  }
-
-  .pointer {
+  .start-btn {
     position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 28px;
-    z-index: 2;
-  }
-
-  .wheel {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 4px solid var(--text-color);
-    background: conic-gradient(
-      var(--sector-1) 0deg 90deg,
-      var(--sector-2) 90deg 180deg,
-      var(--sector-3) 180deg 270deg,
-      var(--sector-4) 270deg 360deg
-    );
-    position: relative;
-    transform: rotate(0deg);
-    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-  }
-
-  .label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100px;
-    margin-left: -50px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: bold;
-    transform: translate(0, -50%) rotate(var(--angle)) translateY(-95px) rotate(calc(-1 * var(--angle)));
-  }
-
-  .result-photo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    pointer-events: none;
-    z-index: 3;
-  }
-  .result-photo.show {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .spin-btn {
-    margin-top: -10px;
-    padding: 14px 32px;
-    font-size: 18px;
+    left: 29.9%;
+    top: 63.6%;
+    width: 39.7%;
+    height: 7.9%;
+    background: none;
     border: none;
-    border-radius: 999px;
-    background: #ff5c8a;
-    color: #fff;
+    padding: 0;
     cursor: pointer;
   }
-  .spin-btn:disabled {
-    opacity: 0.6;
-    cursor: default;
-  }
-
 </style>
 </head>
 <body>
-  <div class="content">
-    <div class="title">
-      <p>이정훈의 생일파티에 초대합니다.</p>
-      <p>룰렛의 결과에 따라 일정이 결정됩니다!</p>
-    </div>
+  <button class="start-btn" id="startBtn" aria-label="시작하기"></button>
 
-    <div class="wheel-outer">
-      <div class="pointer">▼</div>
-      <div class="wheel" id="wheel">
-        <span class="label" style="--angle:45deg">페이커와 협곡</span>
-        <span class="label" style="--angle:135deg">엔믹스 콘서트</span>
-        <span class="label" style="--angle:225deg">프미나 팬싸인회</span>
-        <span class="label" style="--angle:315deg">다은이와 데이트</span>
-      </div>
-      <img class="result-photo" id="resultPhoto" src="images/Page2Result.jpeg" alt="">
-    </div>
-
-    <button class="spin-btn" id="spinBtn">룰렛 돌리기</button>
-  </div>
-
-  <audio id="bgMusic" src="mp3/롤.mp3" loop></audio>
+  <audio id="bgMusic" src="mp3/선물게임.mp3" loop></audio>
 
   <script>
-    const wheel = document.getElementById('wheel');
-    const spinBtn = document.getElementById('spinBtn');
-    const title = document.querySelector('.title');
-    const resultPhoto = document.getElementById('resultPhoto');
+    const startBtn = document.getElementById('startBtn');
     const bgMusic = document.getElementById('bgMusic');
 
     const bgTrack = bgMusic.getAttribute('src');
@@ -207,42 +94,12 @@
       });
     });
 
-    let currentRotation = 0;
-    let gameWon = false;
-
-    spinBtn.addEventListener('click', () => {
-      if (gameWon) {
-        setTimeout(() => {
-          window.location.href = 'page3.html';
-        }, 150);
-        return;
-      }
-
-      spinBtn.disabled = true;
-      resultPhoto.classList.remove('show');
-
-      // 4번 항목(270~360도 구간) 중심이 45도이므로,
-      // 최종 회전각을 mod 360 기준 35~55도 사이로 맞추면 항상 4번에서 멈춘다.
-      const targetMod = 45 + (Math.random() * 20 - 10);
-      const currentMod = ((currentRotation % 360) + 360) % 360;
-      let delta = targetMod - currentMod;
-      delta = ((delta % 360) + 360) % 360;
-
-      const fullSpins = 5 * 360;
-      currentRotation += fullSpins + delta;
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
-
+    startBtn.addEventListener('click', () => {
+      if (startBtn.disabled) return;
+      startBtn.disabled = true;
       setTimeout(() => {
-        title.innerHTML = '<p>축하합니다! 🎉</p><p>최고미녀 다은님과의 데이트가 성사되셨습니다.</p>';
-        spinBtn.disabled = false;
-        spinBtn.textContent = '다음으로';
-        gameWon = true;
-
-        setTimeout(() => {
-          resultPhoto.classList.add('show');
-          new Audio('mp3/당첨.mp3').play().catch(() => {});
-        }, 2000);
-      }, 4000);
+        window.location.href = 'page3.html';
+      }, 150);
     });
   </script>
 </body>
